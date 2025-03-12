@@ -7,6 +7,8 @@ from django.conf import settings
 from celery import shared_task
 from communications.models import Channel, Template, Message
 from email_service.models import EmailBatch, EmailMessage
+from email_service.models import EmailClick
+from django.http import HttpResponse
 
 
 class EmailService:
@@ -127,10 +129,25 @@ def send_batch_emails(batch_id):
 
 
 @shared_task
-def send_email():
+def send_email(message_id):
     """Send individual email through SendGrid"""
 
-    print("Sending email")
+    print("Sending email.....")
+    print("Message ID: ", message_id)
+    from django.core.mail import send_mail
+
+    send_mail(
+        "Subject here",
+        "Here is the message.",
+        "bk3284488@gmail.com",
+        ["bipinkumar.nssc@gmail.com"],
+        fail_silently=False,
+    )
+    # Implementation would go here
+
+    return HttpResponse("Email sent successfully")
+
+    # Update message status
 
 
 @shared_task
